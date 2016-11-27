@@ -17,7 +17,7 @@ Ta dokumentacja zawiera lekcje dla nauczycieli i opis interfejsu aplikacji dla
 programistów (spójrz na listę po lewej stronie). Mamy nadzieję, że programowanie
 z użyciem MicroPythona dla BBC micro:bit sprawi ci wiele przyjemności.
 
-Jeśli nigdy wcześniej nie programowałeś, albo nie jesteś pewien od czego zacząć, zacznij od paradników.
+Jeśli nigdy wcześniej nie programowałeś, albo nie jesteś pewien od czego zacząć, zacznij od poradników.
 
 .. image:: comic.png
 
