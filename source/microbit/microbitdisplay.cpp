@@ -34,6 +34,7 @@ extern "C" {
 #include "modmicrobit.h"
 #include "microbitimage.h"
 #include "microbitdisplay.h"
+#include "microbitpin.h"
 #include "lib/iters.h"
 #include "lib/ticker.h"
 
@@ -132,6 +133,11 @@ static volatile bool wakeup_event = false;
 static mp_uint_t async_delay = 1000;
 static mp_uint_t async_tick = 0;
 static bool async_clear = false;
+
+
+bool microbit_display_active_animation(void) {
+    return async_mode == ASYNC_MODE_ANIMATION;
+}
 
 STATIC void async_stop(void) {
     async_iterator = NULL;
@@ -395,9 +401,9 @@ void microbit_display_animate(microbit_display_obj_t *self, mp_obj_t iterable, m
 // Delay in ms in between moving display one column to the left.
 #define DEFAULT_SCROLL_SPEED       150
 
-void microbit_display_scroll(microbit_display_obj_t *self, const char* str) {
+void microbit_display_scroll(microbit_display_obj_t *self, const char* str, bool wait) {
     mp_obj_t iterable = scrolling_string_image_iterable(str, strlen(str), NULL, false, false);
-    microbit_display_animate(self, iterable, DEFAULT_SCROLL_SPEED, false, true);
+    microbit_display_animate(self, iterable, DEFAULT_SCROLL_SPEED, false, wait);
 }
 
 
@@ -423,6 +429,21 @@ MP_DEFINE_CONST_FUN_OBJ_KW(microbit_display_scroll_obj, 1, microbit_display_scro
 
 mp_obj_t microbit_display_on_func(mp_obj_t obj) {
     microbit_display_obj_t *self = (microbit_display_obj_t*)obj;
+    /* Try to reclaim the pins we need */
+    microbit_obj_pin_fail_if_cant_acquire(&microbit_p3_obj);
+    microbit_obj_pin_fail_if_cant_acquire(&microbit_p4_obj);
+    microbit_obj_pin_fail_if_cant_acquire(&microbit_p6_obj);
+    microbit_obj_pin_fail_if_cant_acquire(&microbit_p7_obj);
+    microbit_obj_pin_fail_if_cant_acquire(&microbit_p9_obj);
+    microbit_obj_pin_fail_if_cant_acquire(&microbit_p10_obj);
+    microbit_obj_pin_acquire(&microbit_p3_obj, microbit_pin_mode_display);
+    microbit_obj_pin_acquire(&microbit_p4_obj, microbit_pin_mode_display);
+    microbit_obj_pin_acquire(&microbit_p6_obj, microbit_pin_mode_display);
+    microbit_obj_pin_acquire(&microbit_p7_obj, microbit_pin_mode_display);
+    microbit_obj_pin_acquire(&microbit_p9_obj, microbit_pin_mode_display);
+    microbit_obj_pin_acquire(&microbit_p10_obj, microbit_pin_mode_display);
+    /* Make sure all pins are in the correct state */
+    microbit_display_init();
     /* Re-enable the display loop.  This will resume any animations in
      * progress and display any static image. */
     self->active = true;
@@ -440,6 +461,13 @@ mp_obj_t microbit_display_off_func(mp_obj_t obj) {
     /* Disable the row strobes, allowing the columns to be used freely for
      * GPIO. */
     nrf_gpio_pins_clear(ROW_PINS_MASK);
+    /* Free pins for other uses */
+    microbit_obj_pin_free(&microbit_p3_obj);
+    microbit_obj_pin_free(&microbit_p4_obj);
+    microbit_obj_pin_free(&microbit_p6_obj);
+    microbit_obj_pin_free(&microbit_p7_obj);
+    microbit_obj_pin_free(&microbit_p9_obj);
+    microbit_obj_pin_free(&microbit_p10_obj);
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_1(microbit_display_off_obj, microbit_display_off_func);

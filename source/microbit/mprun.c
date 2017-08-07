@@ -98,21 +98,10 @@ void mp_run(void) {
     mp_stack_ctrl_init();
     mp_stack_set_limit(1800); // stack is 2k
 
-    // allocate the heap statically in the bss
-    static uint32_t heap[9692 / 4];
-    gc_init(heap, (uint8_t*)heap + sizeof(heap));
-
-    /*
-    // allocate the heap using system malloc
-    extern void *malloc(int);
-    void *mheap = malloc(2000);
-    gc_init(mheap, (byte*)mheap + 2000);
-    */
-
-    /*
-    // allocate the heap statically (will clash with BLE)
-    gc_init((void*)0x20000100, (void*)0x20002000);
-    */
+    // allocate the uPy heap statically in the available RAM between heap and stack
+    extern uint32_t __HeapLimit;
+    extern uint32_t __StackLimit;
+    gc_init(&__HeapLimit, &__StackLimit);
 
     mp_init();
     mp_hal_init();
@@ -128,7 +117,7 @@ void mp_run(void) {
         if (APPENDED_SCRIPT->header[0] == 'M' && APPENDED_SCRIPT->header[1] == 'P') {
             // run appended script
             do_strn(APPENDED_SCRIPT->str, APPENDED_SCRIPT->len);
-        } else if (main_module = microbit_file_open("main.py", 7, false, false)) {
+        } else if ((main_module = microbit_file_open("main.py", 7, false, false))) {
             do_file(main_module);
         } else {
             // from microbit import *
@@ -151,7 +140,7 @@ void mp_run(void) {
     mp_hal_stdout_tx_str("soft reboot\r\n");
 
     memset(&MP_STATE_PORT(async_data)[0], 0, sizeof(MP_STATE_PORT(async_data)));
-    MP_STATE_PORT(async_music_data) = NULL;
+    MP_STATE_PORT(music_data) = NULL;
 
     mp_deinit();
 }

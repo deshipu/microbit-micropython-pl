@@ -5,7 +5,7 @@ Image
 
 The ``Image`` class is used to create images that can be displayed easily on
 the device's LED matrix. Given an image object it's possible to display it via
-the ``device`` API::
+the ``display`` API::
 
     display.show(Image.HAPPY)
 
@@ -57,7 +57,7 @@ Classes
         Set the brightness of the pixel at column ``x`` and row ``y`` to the
         ``value``, which has to be between 0 (dark) and 9 (bright).
 
-        This method will raise an exception when called on any of the build-in
+        This method will raise an exception when called on any of the built-in
         read-only images, like ``Image.HEART``.
 
 
@@ -99,6 +99,29 @@ Classes
 
         Return a new image by inverting the brightness of the pixels in the
         source image.
+
+    .. py:method:: fill(value)
+
+        Set the brightness of all the pixels in the image to the
+        ``value``, which has to be between 0 (dark) and 9 (bright).
+
+        This method will raise an exception when called on any of the built-in
+        read-only images, like ``Image.HEART``.
+
+    .. py:method:: blit(src, x, y, w, h, xdest=0, ydest=0)
+
+        Copy the rectangle defined by ``x``, ``y``, ``w``, ``h`` from the image ``src`` into
+        this image at ``xdest``, ``ydest``.
+        Areas in the source rectangle, but outside the source image are treated as having a value of 0.
+
+        ``shift_left()``, ``shift_right()``, ``shift_up()``, ``shift_down()`` and ``crop()``
+        can are all implemented by using ``blit()``.
+        For example, img.crop(x, y, w, h) can be implemented as::
+
+            def crop(self, x, y, w, h):
+                res = Image(w, h)
+                res.blit(self, x, y, w, h)
+                return res
 
 
 Attributes

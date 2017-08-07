@@ -37,12 +37,11 @@ typedef struct _greyscale_t {
     uint8_t width;
     uint8_t byte_data[]; /* Static initializer for this will have to be C, not C++ */
     void clear();
-    void shiftLeftInplace(mp_int_t n);
-    void shiftRightInplace(mp_int_t n);
-    
+
     /* Thiese are internal methods and it is up to the caller to validate the inputs */
     uint8_t getPixelValue(mp_int_t x, mp_int_t y);
     void setPixelValue(mp_int_t x, mp_int_t y, mp_int_t val);
+    void fill(mp_int_t val);
 } greyscale_t;
 
 typedef union _microbit_image_obj_t {
@@ -54,8 +53,6 @@ typedef union _microbit_image_obj_t {
     mp_int_t width();
     greyscale_t *copy();
     greyscale_t *invert();
-    greyscale_t *shiftLeft(mp_int_t n);
-    greyscale_t *shiftUp(mp_int_t n);
     
     /* This is an internal method it is up to the caller to validate the inputs */
     uint8_t getPixelValue(mp_int_t x, mp_int_t y);
@@ -87,6 +84,7 @@ extern const monochrome_5by5_t microbit_const_image_heart_obj;
 
 #define BLANK_IMAGE (microbit_image_obj_t *)(&microbit_blank_image)
 #define HEART_IMAGE (microbit_image_obj_t *)(&microbit_const_image_heart_obj)
+#define HAPPY_IMAGE (microbit_image_obj_t *)(&microbit_const_image_happy_obj)
 
 microbit_image_obj_t *microbit_image_dim(microbit_image_obj_t *lhs, mp_float_t fval);
 microbit_image_obj_t *microbit_image_sum(microbit_image_obj_t *lhs, microbit_image_obj_t *rhs, bool add);
