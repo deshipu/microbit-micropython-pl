@@ -1,72 +1,76 @@
 Hello, World!
 -------------
 
-The traditional way to start programming in a new language is to get your
-computer to say, "Hello, World!".
+Tradycyjnie, pierwszym krokiem w nauce nowego języka programowania jest stworzenie
+aplikacji, która wyświetli komunikat "Witaj świecie!" (ang. "Hello, World").
+
 
 .. image:: ../scroll-hello.gif
 
-This is easy with MicroPython::
+To proste z MicroPythonem::
 
     from microbit import *
-    display.scroll("Hello, World!")
+    display.scroll("Hello, world!")
 
-Each line does something special. The first line::
+Każdy wiersz ma swoje znaczenie. Pierwszy z nich::
 
     from microbit import *
 
-...tells MicroPython to get all the stuff it needs to work with the BBC
-micro:bit. All this stuff is in a module called ``microbit`` (a module
-is a library of pre-existing code). When you ``import`` something you're telling
-MicroPython that you want to use it, and ``*`` is Python's way to say
-*everything*. So, ``from microbit import *`` means, in English, "I want to be
-able to use everything from the microbit code library".
+...mówi MicroPythonowi, by zaimportował wszystkie rzeczy potrzebne do pracy
+z BBC micro:bit. Wszystko to jest w module ``microbit`` (moduł to biblioteka
+z wcześniej przygotowanym kodem). Poleceniem ``import`` mówisz MicroPythonowi,
+że chcesz użyć danego modułu, a ``*`` to sposób Pythona na określenie *wszystkiego*.
+Zatem ``from microbit import *`` oznacza "chcę użyć wszystkiego co jest dostępne
+w bibliotece microbit".
 
-The second line::
+Druga linia::
 
-    display.scroll("Hello, World!")
+    display.scroll("Hello, world!")
+    
+...mówi MicroPythonowi, by wyświetlił przesuwający się ciąg znaków "Hello, 
+world!". ``display`` w tym przypadku to *obiekt*
+(ang. object) z modułu ``microbit``, który reprezentuje fizyczny wyświetlacz
+urządzenia (mówimy "obiekt" zamiast "rzecz" lub "to coś").
+By wydać wyświetlaczowi polecenie, po kropce ``.`` podajemy komendę -- tak
+naprawdę takie polecenia nazywamy *metodami* (ang. method). W tym przypadku
+używamy polecenia ``scroll`` (ang. przewiń). Polecenie ``scroll``
+musi wiedzieć jakie znaki pokazać na wyświetlaczu. Wpisujemy je ujęte
+w cudzysłów (``"``) i zamknięte w nawiasy (``(`` i ``)``). W programowaniu to
+co przekazujemy do metody nazywamy *argumentami* (ang. arguments). Zatem 
+``display.scroll("Hello, world!")`` oznacza, po polsku, "chcę użyć 
+wyświetlacza by pokazać przesuwający się tekst 'Hello, world!'". Jeśli metoda
+nie potrzebuje żadnych argumentów, musimy to jasno określić używając pustych 
+nawiasów: ``()``.
 
-...tells MicroPython to use the display to scroll the string of characters
-"Hello, World!". The ``display`` part of that line is an *object* from the
-``microbit`` module that represents the device's physical display (we say
-"object" instead of "thingy", "whatsit" or "doodah"). We can tell the display
-to do things with a full-stop ``.`` followed by what looks like a command (in
-fact it's something we call a *method*). In this case we're using the
-``scroll`` method. Since ``scroll`` needs to know what characters to scroll
-across the physical display we specify them between double quotes (``"``)
-within parenthesis (``(`` and ``)``). These are called the *arguments*. So,
-``display.scroll("Hello, World!")`` means, in English, "I want you to use the
-display to scroll the text 'Hello, World!'". If a method doesn't need any
-arguments we make this clear by using empty parenthesis like this: ``()``.
-
-Copy the "Hello, World!" code into your editor and flash it onto the device.
-Can you work out how to change the message? Can you make it say hello to you?
-For example, I might make it say "Hello, Nicholas!". Here's a clue, you need to
-change the scroll method's argument.
+Skopiuj powyższy kod do swojego edytora i wgraj go (ang. flash) do urządzenia.
+Czy domyślasz się jak zmienić wyświetlany tekst? Czy możesz go zmienić tak, 
+by przywitał ciebie? Na przykład, chciałbym by tekst brzmiał "Witaj, Andrzeju!". 
+Mała podpowiedź: musisz zmienić argument metody ``scroll``.
 
 .. warning::
 
-    It may not work. :-)
+    To może nie działać :-)
+    
+    Tutaj zaczyna się prawdziwa zabawa, a MicroPython stara się być naprawdę
+    pomocny. Jeśli napotka błąd, to na wyświetlaczu pokaże komunikat błędu.
+    W miarę możliwości, pokaże również numer linii kodu, która zawiera błąd.
 
-    This is where things get fun and MicroPython tries to be helpful. If
-    it encounters an error it will scroll a helpful message on the micro:bit's
-    display. If it can, it will tell you the line number for where the error
-    can be found.
-
-    Python expects you to type **EXACTLY** the right thing. So, for instance,
-    ``Microbit``, ``microbit`` and ``microBit`` are all different things to
-    Python. If MicroPython complains about a ``NameError`` it's probably
-    because you've typed something inaccurately. It's like the difference
-    between referring to "Nicholas" and "Nicolas". They're two different people
-    but their names look very similar.
-
-    If MicroPython complains about a ``SyntaxError`` you've simply typed code
-    in a way that MicroPython can't understand. Check you're not missing any
-    special characters like ``"`` or ``:``. It's like putting. a full stop in
-    the middle of a sentence. It's hard to understand exactly what you mean.
-
-    Your microbit may stop responding: you cannot flash new code to it or
-    enter commands into the REPL. If this happens, try power cycling it. That
-    is, unplug the USB cable (and battery cable if it's connected), then plug
-    the cable back in again. You may also need to quit and re-start your code
-    editor application.
+    Python oczekuje, że wprowadzisz **BEZBŁĘDNY** kod. Na przykład, ``Microbit``,
+    ``microbit`` i ``microBit`` są przez Pythona traktowane jak trzy osobne
+    rzeczy. Jeśli w treści błędu zobaczysz ``NameError`` (błąd nazwy), oznacza
+    to że prawdopodobnie wpisana nazwa została podana niedokładnie. To jak różnica
+    między "Pawłem" i "Gawłem" - dwa różne imiona, choć brzmią i wyglądają
+    podobnie.
+    
+    Natomiast jeśli w treści błędu zobaczysz ``SyntaxError`` (błąd składni),
+    oznacza to po prostu, że podany kod jest niezrozumiały dla MicroPythona. 
+    Sprawdź czy nie brakuje żadnych znaków specjalnych, jak ``"`` czy ``:``. 
+    To tak jak gdyby umieścić. kropkę w środku zdania. Trudno jest wtedy 
+    zrozumieć co autor miał na myśli.
+    
+    Twój microbit może przestać reagować: nie uda się zaprogramować nowego
+    kodu lub wpisywać poleceń w konsoli REPL. W takim przypadku spróbuj
+    odłączyć urządzenie od prądu i podłączyć ponownie po krótkiej chwili.
+    Chodzi o to, by odłączyć kabel USB (i kabel baterii jeśli jest podłączony),
+    a po chwili podłączyć ponownie. Może być także konieczne zrestartowanie
+    edytora kodu.
