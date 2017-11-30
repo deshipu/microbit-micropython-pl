@@ -1,108 +1,114 @@
-Buttons
+Przyciski
 -------
 
-So far we have created code that makes the device do something. This is called
-*output*. However, we also need the device to react to things. Such things are
-called *inputs*.
+Jak dotychczas utworzyliśmy kod umożliwiający urządzeniu robienie czegoś.
+Nazywa się to *wyjście*. Musimy też jednak umożliwić urządzeniu reagowanie.
+To, na co ono reaguje nazywamy *wejściem*.
 
-It's easy to remember: output is what the device puts out to the world
-whereas input is what goes into the device for it to process.
+Łatwo zapamiętać: wyjście dotyczy wszystkiego co wychodzi z urządzenia,
+natomiast wejście to wszystko co przychodzi do urządzenia w celu
+przetworzenia.
 
-The most obvious means of input on the micro:bit are its two buttons, labelled
-``A`` and ``B``. Somehow, we need MicroPython to react to button presses.
+Najłatwiejszą metodą dostarczenia *wejścia* są dwa przyciski, oznaczone
+``A`` i ``B``. Musimy jakoś zmusić MicroPython do reagowania na ich
+naciśnięcie.
 
-This is remarkably simple::
+Jest to niezwykle proste:
 
     from microbit import *
 
     sleep(10000)
     display.scroll(str(button_a.get_presses()))
 
-All this script does is sleep for ten thousand milliseconds (i.e. 10 seconds)
-and then scrolls the number of times you pressed button ``A``. That's it!
+Ten skrypt śpi przez 10 000 milisekund (czyli 10 sekund), a po tym
+czasie na wyświetlaczu przewinie się liczba wciśnięć przycisku ``A``.
+To wszystko.
 
-While it's a pretty useless script, it introduces a couple of interesting new
-ideas:
+Chociaż ten skrypt jest bezużyteczny, to jednak pokazuje nam kilka ciekawych
+koncepcji:
 
-#. The ``sleep`` *function* will make the micro:bit sleep for a certain number
-   of milliseconds. If you want a pause in your program, this is how to do it.
-   A *function* is just like a *method*, but it isn't attached by a dot to an
-   *object*.
-#. There is an object called ``button_a`` and it allows you to get the number
-   of times it has been pressed with the ``get_presses`` *method*.
+#. *Funkcja* ``sleep`` usypia microbit na pewną liczbę milisekund. Jeżeli
+   chcesz zatrzymać program, możesz to zrobić używając tej funkcji.
+   *Funkcja* jest podobna do *metody* ale nie jest przyporządkowana do
+   *obiektu* za pomocą kropki.
 
-Since ``get_presses`` gives a numeric value and ``display.scroll`` only
-displays characters, we need to convert the numeric value into a string of
-characters. We do this with the ``str`` function (short for "string" ~ it
-converts things into strings of characters).
+#. Obiekt ``button_a`` pozwala ci pobrać liczbę naciśnięć przycisku za pomocą
+   *metody* ``get_presses``.
 
-The third line is a bit like an onion. If the parenthesis are the
-onion skins then you'll notice that ``display.scroll`` contains ``str`` that
-itself contains ``button_a.get_presses``. Python attempts to work out the
-inner-most answer first before starting on the next layer out. This is called
-*nesting* - the coding equivalent of a Russian Matrioshka doll.
+*Metoda* ``get_presses`` daje nam tylko liczbę, a ``display.scroll`` przyjmuje
+tylko ciągi znaków. Dlatego musimy zmienić liczbę na ciąg znaków, co możemy
+zrobić za pomocą funkcji ``str`` (skrót od angielskiego słowa
+"string"), która przetwarza wszystko na ciąg znaków.
+
+Trzeci wiersz jest jak cebula. Jeżeli przyjmiesz nawiasy za warstwy cebuli, to
+zauważysz, że ``display.scroll`` zawiera ``str``, który zawiera
+``button_a.get_presses``. Python próbuje rozpracować najbardziej wewnętrzne
+wyrażenia najpierw, zanim przejdzie do następnej warstwy. To nazywa się
+*zagnieżdżenie* - programistyczny odpowiednik rosyjskiej matrioszki.
 
 .. image:: matrioshka.jpg
 
-Let's pretend you've pressed the button 10 times. Here's how Python works out
-what's happening on the third line:
+Przyjmijmy, że nacisnąłeś przycisk 10 razy. Python w następujący sposób
+analizuje co się dzieje w trzeciej linii:
 
-Python sees the complete line and gets the value of ``get_presses``::
+Python widzi pełną linię i dostaje wartość ``get_presses``::
 
     display.scroll(str(button_a.get_presses()))
 
-Now that Python knows how many button presses there have been, it converts the
-numeric value into a string of characters::
+Teraz, gdy Python wie już ile razy został wciśnięty przycisk, skonwertuje
+wartość liczbową na ciąg znaków::
 
     display.scroll(str(10))
 
-Finally, Python knows what to scroll across the display::
+W końcu Python wie, co ma wyświetlić na ekranie::
 
     display.scroll("10")
 
-While this might seem like a lot of work, MicroPython makes this happen
-extraordinarily fast.
+Może ci się wydawać, że to jest mnóstwo pracy, ale MicroPython robi to
+niezwykle szybko.
 
-Event Loops
+Pętle zdarzeń
 +++++++++++
 
-Often you need your program to hang around waiting for something to happen. To
-do this you make it loop around a piece of code that defines how to react to
-certain expected events such as a button press.
+Często chcesz aby program poczekał na jakieś zdarzenie. Żeby to uzyskać, musisz
+zamknąć w pętli kawałek kodu definiujący jak reagować na oczekiwane zdarzenia,
+takie jak naciśnięcie przycisku.
 
-To make loops in Python you use the ``while`` keyword. It checks if something
-is ``True``. If it is, it runs a *block of code* called the *body* of the loop.
-If it isn't, it breaks out of the loop (ignoring the body) and the rest of the
-program can continue.
+Pętle w Pythonie tworzymy przy użyciu polecania ``while`` (ang. dopóki). Sprawdza ono czy
+coś jest ``True`` (ang. prawdziwe). Jeżeli tak jest, to uruchamia *blok kodu* zwany *ciałem*
+pętli. Jeżeli jednak nie jest, to przerywa wykonywanie pętli (ignorując ciało pętli)
+i przechodzi do dalszej części kodu.
 
-Python makes it easy to define blocks of code. Say I have a to-do list written
-on a piece of paper. It probably looks something like this::
+W Pythonie definiowanie bloków kodu jest proste. Powiedzmy, że mam listę rzeczy do
+zrobienia napisaną na kartce papieru. Może to wyglądać tak::
 
-    Shopping
-    Fix broken gutter
-    Mow the lawn
+    Zakupy
+    Napraw uszkodzoną rynnę
+    Skoś trawnik
 
-If I wanted to break down my to-do list a bit further, I might write something
-like this::
+Gdybym chciał nieco rozbić moją listę rzeczy do zrobienia, to mógłbym napisać
+coś takiego::
 
-    Shopping:
-        Eggs
-        Bacon
-        Tomatoes
-    Fix broken gutter:
-        Borrow ladder from next door
-        Find hammer and nails
-        Return ladder
-    Mow the lawn:
-        Check lawn around pond for frogs
-        Check mower fuel level
+    Zakupy:
+        Jaja
+        Boczek
+        Pomidory
+    Napraw uszkodzoną rynnę:
+        Pożycz drabinę od sąsiada
+        Znajdź młotek i gwoździe
+        Zwróć drabinę
+    Skoś trawnik:
+        Sprawdź trawnik wokół sadzawki dla żab
+        Sprawdź poziom paliwa w kosiarce
 
-It's obvious that the main tasks are broken down into sub-tasks that are
-*indented* underneath the main task to which they are related. So ``Eggs``,
-``Bacon`` and ``Tomatoes`` are obviously related to ``Shopping``. By indenting
-things we make it easy to see, at a glance, how the tasks relate to each other.
+Oczywiście główne zadania są podzielone na podrzędne zadania, umieszczone
+poniżej głównego zadania, z którym są powiązane i *wcięte*.
+Tak więc ``Jaja``, ``Boczek`` i ``Pomidory`` są na pierwszy rzut oka
+związane z zadaniem ``Zakupy``. Wcięcia ułatwiają nam sprawdzanie w jaki sposób
+zadania są powiązane ze sobą.
 
-This is called *nesting*. We use nesting to define blocks of code like this::
+Nazywamy to *zagnieżdżeniem*. Zagnieżdżania używamy do definiowania bloków kodu
+w ten oto sposób::
 
     from microbit import *
 
@@ -111,41 +117,43 @@ This is called *nesting*. We use nesting to define blocks of code like this::
 
     display.show(Image.SURPRISED)
 
-The ``running_time`` function returns the number of milliseconds since the
-device started.
+Funkcja ``running_time`` zwraca liczbę milisekund od startu urządzenia.
 
-The ``while running_time() < 10000:`` line checks if the running time is less
-than 10000 milliseconds (i.e. 10 seconds). If it is, *and this is where we can
-see scoping in action*, then it'll display ``Image.ASLEEP``. Notice how this is
-indented underneath the ``while`` statement *just like in our to-do list*.
+Linia ``while running_time() < 10000:`` sprawdza czy czas pracy urządzenia
+jest mniejszy od 10 000 milisekund (czyli 10 sekund). Jeżeli tak, *i tu widzimy
+działanie zagnieżdżania*, to zostanie wyświetlony
+``Image.ASLEEP``. Zwróć uwagę na wcięcie kodu po poleceniu ``while``
+*takie jak w naszej liście zadań*.
 
-Obviously, if the running time is equal to or greater than 10000 milliseconds
-then the display will show ``Image.SURPRISED``. Why? Because the ``while``
-condition will be False (``running_time`` is no longer ``< 10000``). In that
-case the loop is finished and the program will continue after the ``while``
-loop's block of code. It'll look like your device is asleep for 10
-seconds before waking up with a surprised look on its face.
+Oczywiście, jeśli czas pracy jest równy lub większy niż 10 000 milisekund,
+wówczas na ekranie pojawi się ``Image.SURPRISED``. Dlaczego? Ponieważ warunek
+``while`` (ang. dopóki) będzie fałszywy (ang. False) (``running_time`` nie jest już ``< 10000``).
+W takim przypadku pętla jest zakończona i program będzie kontynuowany po bloku
+kodu pętli ``while``. Będzie to sprawiać wrażenie, że twoje urządzenie śpi przez 10 sekund
+zanim obudzi się z zaskoczeniem na twarzy.
 
-Try it!
+Spróbuj sam!
 
-Handling an Event
+Obsługa zdarzenia
 +++++++++++++++++
 
-If we want MicroPython to react to button press events we should put it into
-an infinite loop and check if the button ``is_pressed``.
+Jeśli chcemy aby MicroPython reagował na zdarzenia naciśnięcia przycisku,
+musimy wprowadzić go w nieskończoną pętlę i sprawdzać w niej czy przycisk jest
+wciśnięty (ang. ``is_pressed``).
 
-An infinite loop is easy::
+Nieskończona pętla jest prosta::
 
     while True:
-        # Do stuff
+        # rób coś
 
-(Remember, ``while`` checks if something is ``True`` to work out if it should
-run its block of code. Since ``True`` is obviously ``True`` for all time, you
-get an infinite loop!)
+(Pamiętaj, że ``while`` sprawdza czy coś jest ``True`` przed każdym wykonaniem
+bloku kodu. Ponieważ ``True`` jest oczywiście ``True`` przez cały czas, to
+otrzymujesz nieskończoną pętlę!)
 
-Let's make a very simple cyber-pet. It's always sad unless you're pressing
-button ``A``. If you press button ``B`` it dies. (I realise this isn't a very
-pleasant game, so perhaps you can figure out how to improve it.)::
+Zróbmy bardzo proste elektroniczne zwierzątko. Jest ono smutne, gdy nie naciskasz
+przycisku ``A``. A gdy wciśniesz przycisk ``B`` umiera. (Zdaję sobie
+sprawę, że to nie jest zbyt przyjemna gra, więc może masz pomysł jak ją
+ulepszyć.)::
 
     from microbit import *
 
@@ -159,31 +167,35 @@ pleasant game, so perhaps you can figure out how to improve it.)::
 
     display.clear()
 
-Can you see how we check what buttons are pressed? We used ``if``,
-``elif`` (short for "else if") and ``else``. These are called *conditionals*
-and work like this::
+Rozumiesz jak sprawdzić, które przyciski są wciśnięte? Użyliśmy ``if`` (ang. jeśli),
+``elif`` (skrót od "else if") (ang. jeśli jednak) oraz ``else`` (ang. w pozostałych przypadkach).
+Są one nazywane *warunkami* i
+działają tak::
 
-    if something is True:
-        # do one thing
-    elif some other thing is True:
-        # do another thing
+    if coś jest True:
+        # zrób pierwszą rzecz
+    elif coś innego jest True:
+        # zrób następną rzecz
     else:
-        # do yet another thing.
+        # zrób jeszcze coś.
 
-This is remarkably similar to English!
+Prawie jak po polsku!
 
-The ``is_pressed`` method only produces two results: ``True`` or ``False``.
-If you're pressing the button it returns ``True``, otherwise it returns
-``False``. The code above is saying, in English, "for ever and ever, if
-button A is pressed then show a happy face, else if button B is pressed break
-out of the loop, otherwise display a sad face." We break out of the loop (stop
-the program running for ever and ever) with the ``break`` statement.
+Metoda ``is_pressed`` generuje jeden z dwóch wyników: ``True`` albo ``False``.
+Jeżeli przycisk jest wciśnięty, zwraca ``True``, w przeciwnym wypadku zwróci
+``False``. Powyższy kod można przetłumaczyć jako "przez cały czas: jeśli
+przycisk A jest wciśnięty - pokazuj szczęśliwą twarz, jeśli jednak przycisk
+B jest wciśnięty - przerwij pętlę, a w pozostałych przypadkach pokaż smutną
+minę". Przerywamy pętlę (zatrzymując działający przez cały czas program) za
+pomocą instrukcji ``break`` (ang. przerwij).
 
-At the very end, when the cyber-pet is dead, we ``clear`` the display.
+Na samym końcu, kiedy elektroniczne zwierzątko nie żyje, czyścimy
+(ang. ``clear``) ekran.
 
-Can you think of ways to make this game less tragic? How would you check if
-*both* buttons are pressed? (Hint: Python has ``and``, ``or`` and ``not``
-logical operators to help check multiple truth statements (things that
-produce either ``True`` or ``False`` results).
+Wiesz jak uczynić tę grę mniej tragiczną? Jak sprawdziłabyś, czy *oba*
+przyciski są wciśnięte? (Podpowiedź: Python ma operatory logiczne "i" (ang.
+``and``), "lub" (ang. ``or``) oraz "nie" (ang .``not``), którymi można
+sprawdzić wiele warunków (wyrażeń, które mają wartość ``True`` lub
+``False``).
 
 .. footer:: The image of Matrioshka dolls is licensed CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=69402
