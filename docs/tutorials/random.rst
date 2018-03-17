@@ -1,12 +1,11 @@
-Random
-------
+﻿Losowość
+--------
 
-Sometimes you want to leave things to chance, or mix it up a little: you want
-the device to act randomly.
+Czasem chcesz pozostawić rzeczy szczęściu, lub odrobinę je pomieszać. Słowem: chcesz, 
+by urządzenie działało losowo.
 
-MicroPython comes with a ``random`` module to make it easy to introduce chance
-and a little chaos into your code. For example, here's how to scroll a random
-name across the display::
+MicroPython zawiera moduł ``random``, wprowadzający element losowy oraz odrobinę
+chaosu do Twojego kodu. Oto przykładowy kod przewijający na wyświetlaczu losowe imię::
 
     from microbit import *
     import random
@@ -15,46 +14,45 @@ name across the display::
 
     display.scroll(random.choice(names))
 
-The list (``names``) contains seven names defined as strings of characters.
-The final line is *nested* (the "onion" effect introduced earlier): the
-``random.choice`` method takes the ``names`` list as an argument and returns
-an item chosen at random. This item (the randomly chosen name) is the argument
-for ``display.scroll``.
+Lista (``names``) zawiera siedem imion zdefiniowanych jako łańcuchy znaków.
+Ostatnia linia jest *zagnieżdżona* (efekt "cebuli" zaprezentowany wcześniej):
+metoda ``random.choice`` przyjmuje jako argument listę ``names`` oraz zwraca
+jej losowy element. Element ten (losowo wybrane imię) jest argumentem dla
+``display.scroll``.
 
-Can you modify the list to include your own set of names?
+Czy możesz zmodyfikować listę tak, by zawierała wybrane przez Ciebie imiona?
 
-Random Numbers
-++++++++++++++
+Losowe Liczby
++++++++++++++
 
-Random numbers are very useful. They're common in games. Why else do we have
-dice?
+Losowe liczby są bardzo użyteczne. Często używane są w grach. Po cóż innego
+mamy kostki?
 
-MicroPython comes with several useful random number methods. Here's how to
-make a simple dice::
+MicroPython zawiera wiele użytecznych metod powiązanych z losowymi liczbami.
+Oto przykład prostej kości do gry::
 
     from microbit import *
     import random
 
     display.show(str(random.randint(1, 6)))
 
-Every time the device is reset it displays a number between 1 and 6. You're
-starting to get familiar with *nesting*, so it's important to note that
-``random.randint`` returns a whole number between the two arguments, inclusive
-(a whole number is also called an integer - hence the name of the method).
-Notice that because ``display.show`` expects a character then we use the
-``str`` function to turn the numeric value into a character (we turn, for
-example, ``6`` into ``"6"``).
+Po każdym restarcie urządzenia, wyświetla ono numer z zakresu 1-6. Zaczynasz
+zapoznawać się z *zagnieżdżaniem*, warto więc zauważyć, że ``random.randint``
+zwraca liczbę całkowitą z podanego przedziału włącznie
+(liczba całkowita nazywana jest integer, stąd nazwa metody). Zauważ, że skoro
+``display.show`` oczekuje znaku alfabetycznego, używamy funkcji ``str`` do zamiany
+numeru na znak (na przykład: ``6`` na ``"6"``).
 
-If you know you'll always want a number between ``0`` and ``N`` then use the
-``random.randrange`` method. If you give it a single argument it'll return
-random integers up to, but not including, the value of the argument ``N``
-(this is different to the behaviour of ``random.randint``).
+W wypadku, gdy zawsze potrzebujesz liczny z przedziału pomiędzy ``0`` a ``N``,
+używaj metody ``random.randrange``. Gdy podasz jej pojedynczy argument, zwróci
+losową liczbę całkowitą z przedziału od ``0`` do ``N`` włącznie (w
+przeciwieństwie do funkcji ``random.randint``).
 
-Sometimes you need numbers with a decimal point in them. These are called
-*floating point* numbers and it's possible to generate such a number with the
-``random.random`` method. This only returns values between ``0.0`` and ``1.0``
-inclusive. If you need larger random floating point numbers add the results
-of ``random.randrange`` and ``random.random`` like this::
+Czasami potrzebujesz liczby z miejscem po przecinku. Nazywamy je liczbami
+*zmiennoprzecinkowymi* i można je uzyskać używając metody ``random.random``.
+Zwraca ona wartość z przedziału domkniętego od ``0.0`` do ``1.0``. Jeżeli
+potrzebujesz dużej liczby zmiennoprzecinkowej dodaj ``random.randrange`` do
+``random.random``, jak poniżej::
 
     from microbit import *
     import random
@@ -62,22 +60,22 @@ of ``random.randrange`` and ``random.random`` like this::
     answer = random.randrange(100) + random.random()
     display.scroll(str(answer))
 
-Seeds of Chaos
-++++++++++++++
+Ziarno Chaosu
++++++++++++++
 
-The random number generators used by computers are not truly random. They just
-give random like results given a starting *seed* value. The seed is often
-generated from random-ish values such as the current time and/or readings from
-sensors such as the thermometers built into chips.
+Losowe liczby generowane przez komputery nie są naprawdę losowe. Zwracają
+jedynie pseudolosowe rezultaty zaczynając od ziarna. Wartość ziarna
+generowana jest na podstawie pseudolosowej wartości, takiej jak obecna
+godzina i/lub odczyty z sensorów sprzętowych.
 
-Sometimes you want to have repeatable random-ish behaviour: a source of
-randomness that is reproducible. It's like saying that you need the same five
-random values each time you throw a dice.
+Czasem chcesz osiągnąć powtarzalne, pseudolosowe zachowanie: odtwarzalne
+ziarno. To jakby oczekiwać tych samych, losowych wyników pięciu kolejnych
+rzutów kością.
 
-This is easy to achieve by setting the *seed* value. Given a known seed the
-random number generator will create the same set of random numbers. The seed is
-set with ``random.seed`` and any whole number (integer). This version of the
-dice program always produces the same results::
+Można to łatwo osiągnąć ustalając odgórnie wartość ziarna. Dla danego ziarna
+generator liczb losowych będzie tworzył tę samą pulę liczb losowych.
+Ziarno jest ustawiane poprzez ``random.seed`` jako dowolna liczba całkowita.
+Poniższa wersja programu do rzutu kością poda zawsze ten sam rezultat::
 
     from microbit import *
     import random
@@ -87,5 +85,5 @@ dice program always produces the same results::
         if button_a.was_pressed():
             display.show(str(random.randint(1, 6)))
 
-Can you work out why this program needs us to press button A instead of reset
-the device as in the first dice example..?
+Czy dostrzegasz, czemu powyższy program oczekuje wciśnięcia klawisza A, w
+przeciwieństwie do restartu urządzenia z poprzedniego przykładu?
