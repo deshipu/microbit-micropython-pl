@@ -1,17 +1,19 @@
 Bluetooth
 *********
 
-While the BBC micro:bit has hardware capable of allowing the device to work as
-a Bluetooth Low Energy (BLE) device, it only has 16k of RAM. The BLE stack
-alone takes up 12k RAM which means there's not enough room to run MicroPython.
+Wprawdzie BBC micro:bit jest wyposażony w sprzęt pozwalający na pracę jako
+urządzenie Bluetooth Low Energy (BLE), ma jednak tylko 16 kilobajtów pamięci
+RAM. Oprogramowanie BLE zajmuje 12 kilobajtów pamięci RAM, przez co nie zostaje
+jej wystarczająco dużo na MicroPythona.
 
-Future versions of the device may come with 32k RAM which would be sufficient.
-However, until such time it's highly unlikely MicroPython will support BLE.
+Jest możliwe, że przyszłe wersje urządzenia będą wyposażone w 32 kilobajty
+pamięci RAM, co może już wystarczyć. Dopóki to nie nastąpi, wsparcie dla BLE
+w MicroPythonie jest mało prawdopodobne.
 
 .. note::
-    MicroPython uses the radio hardware with the ``radio`` module. This allows
-    users to create simple yet effective wireless networks of micro:bit
-    devices.
+    MicroPython daje dostęp do wbudowanego radia poprzez moduł ``radio``.
+    Pozwala to użytkownikom na stworzenie prostej, lecz efektywnej
+    bezprzewodowej sieci urządzeń micro:bit.
 
-    Furthermore, the protocol used in the ``radio`` module is a lot simpler
-    than BLE, making it far easier to use in an educational context.
+    Ponadto, protokół używany w module ``radio`` jest znacznie prostszy niż
+    BLE. Jest dzięki temu łatwiejszy w użyciu w edukacji.
