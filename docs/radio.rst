@@ -3,144 +3,109 @@ Radio
 
 .. py:module:: radio
 
-The ``radio`` module allows devices to work together via simple wireless
-networks.
+Moduł "radio" umożliwia urządzeniom wspólną pracę przez prostą sieć bezprzewodową.  
 
-The radio module is conceptually very simple:
+Moduł radia z zamyśle jest bardzo prosty:
 
-* Broadcast messages are of a certain configurable length (up to 251 bytes).
-* Messages received are read from a queue of configurable size (the larger the queue the more RAM is used). If the queue is full, new messages are ignored.
-* Messages are broadcast and received on a preselected channel (numbered 0-100).
-* Broadcasts are at a certain level of power - more power means more range.
-* Messages are filtered by address (like a house number) and group (like a named recipient at the specified address).
-* The rate of throughput can be one of three pre-determined settings.
-* Send and receieve bytes to work with arbitrary data.
-* As a convenience for children, it's easy to send and receive messages as strings.
-* The default configuration is both sensible and compatible with other platforms that target the BBC micro:bit.
+* Przesyłane wiadomości są konfigurowanej długości (do 251 bajtów). 
+* Otrzymywane wiadomości przechowywane są w kolejce o określonej konfigurowalnej wielkości (im większa kolejka tym większe zużycie pamięci RAM). Jeżeli kolejka jest pełna, nowa wiadomość przychodząca zostanie zignorowana. 
+* Wiadomości przesyłane są wcześniej wybranym kanałem (zakres numeracji 0-100).
+* Nadawanie z określoną mocą sygnału - im większa moc, tym większy zasięg nadawania. 
+* Wiadomości filtrowane są według adresów (jak numery domów) i grup (jak nazwisko adresata pod danym adresem).
+* Przepustowość może być na jednym z trzech predefiniowanych ustawień.  
+* Wysyłanie i odbierania danych różnych typów.
+* Dodatkowym ułatwieniem dla dzieci są łatwe do wysyłania i odbierania wiadomości w postaci ciągów znaków. 
+* Domyślna konfiguracja jest rozsądna i kompatybilna z innymi platformami związanymi z BBC micro:bit.
+	
+Aby mieć dostęp do tego modułu musisz wykonać import: 	
 
-To access this module you need to::
+	import radio
 
-    import radio
+Zakładamy, że już to zrobiłeś dla poniższych przykładów. 
 
-We assume you have done this for the examples below.
-
-Constants
-=========
+Stałe
+=====
 
 .. py:attribute:: RATE_250KBIT
 
-    Constant used to indicate a throughput of 256 Kbit a second.
+    Stała oznaczająca przepustowość 256 Kbit na sekundę. 
 
 .. py:attribute:: RATE_1MBIT
 
-    Constant used to indicate a throughput of 1 MBit a second.
+    Stała oznaczająca przepustowość 1 MBit na sekundę. 
 
 .. py:attribute:: RATE_2MBIT
 
-    Constant used to indicate a throughput of 2 MBit a second.
+    Stała oznaczająca przepustowość 2 MBit na sekundę. 
 
 
-Functions
-=========
+Funkcje
+=======
 
 .. py:function:: on()
 
-    Turns the radio on. This needs to be explicitly called since the radio
-    draws power and takes up memory that you may otherwise need.
+	Włącza radio. Funkcja musi być wywołana świadomie ponieważ radio pobiera prąd i zajmuje zasoby pamięci, które mogą być potrzebne do czegoś innego.  
 
 .. py:function:: off()
 
-    Turns off the radio, thus saving power and memory.
+	Wyłącza radio oszczędzając prąd i pamięć. 
 
 .. py:function:: config(**kwargs)
 
-    Configures various keyword based settings relating to the radio. The
-    available settings and their sensible default values are listed below.
+	Konfiguruje ustawienia związane z radiem. Nazwy ustawień oparte są o słowa kluczowe.
+	Dostępne ustawienia i ich rozsądne domyślne wartości są podane poniżej.
+	
+	``length`` - długość (wartość domyślna = 32) definiuje maksymalną długość, w bajtach, wiadomości przesyłanej przez radio. Może mieć do 251 bajtów długości (254 - 3 bajty dla S0, długości i preambuły S1). 
+	
+	``queue`` - kolejka (wartość domyślna = 3) określa liczbę wiadomości, które mogą być przechowywane w kolejce wiadomości przychodzących. Jeżeli nie ma wolnego miejsca w kolejce, następna wiadomość przychodząca zostanie pominięta. 
+	
+	``channel`` - kanał (wartość domyślna = 7) musi być liczbą całkowitą od 0 do 100 (włącznie), która określa kanał na który nastrojone jest radio. Wiadomości będą wysyłane tym kanałem i tylko wiadomości otrzymane tym kanałem będą umieszczone w kolejce wiadomości przychodzących. Każdy kanał ma szerokość 1MHz, począwszy od 2400MHz. 
+	
+	``power`` - moc (domyślna wartość = 6) jest liczbą całkowitą od 0 do 7 (włącznie) służącą do wskazania mocy sygnału w czasie nadawania. Im wyższa liczba tym mocniejszy sygnał, ale też większe zużycie prądu przez urządzenie. Wartości stałej odwołują się do poszczególnych wartości mocy nadawania wyrażonej w decybelach miliwatów [dbm]: -30, -20, -16, -12, -8, -4, 0, 4.
 
-    The ``length`` (default=32) defines the maximum length, in bytes, of a
-    message sent via the radio. It can be up to 251 bytes long (254 - 3 bytes
-    for S0, LENGTH and S1 preamble).
+	``address`` - adres (domyślna wartość = 0x75626974) to ustalona nazwa, wyrażona jako 32 bitowy adres, stosowana do filtrowania przychodzących pakietów na poziomie sprzętowym, zachowując tylko pasujące do ustawionego adresu. Wartość domyślna jest również stosowana domyślnie na innych platformach kompatybilnych z micro:bit.
+	
+	``group`` - grupa (domyślna wartość = 0) jest 8 bitową wartością (0-255) stosowaną razem z adresem, do filtrowania wiadomości. Dla lepszego zobrazowania "adres" jest jak adres domu a "grupa" jest jak osoba w nim mieszkająca do której adresujemy przesyłkę.
 
-    The ``queue`` (default=3) specifies the number of messages that can be
-    stored on the incoming message queue. If there are no spaces left on the
-    queue for incoming messages, then the incoming message is dropped.
+	``data_rate`` - (domyślne ustawienie = radio.RATE_1MBIT) wyraża prędkość przesyłu danych. Może przyjmować jedną ze stałych zdefiniowanych w module "radio": ``RATE_250KBIT``, ``RATE_1MBIT`` lub ``RATE_2MBIT``.
 
-    The ``channel`` (default=7) can be an integer value from 0 to 100
-    (inclusive) that defines an arbitrary "channel" to which the radio is
-    tuned. Messages will be sent via this channel and only messages received
-    via this channel will be put onto the incoming message queue. Each step is
-    1MHz wide, based at 2400MHz.
-
-    The ``power`` (default=6) is an integer value from 0 to 7 (inclusive) to
-    indicate the strength of signal used when broadcasting a message. The
-    higher the value the stronger the signal, but the more power is consumed
-    by the device. The numbering translates to positions in the following list
-    of dBm (decibel milliwatt) values: -30, -20, -16, -12, -8, -4, 0, 4.
-
-    The ``address`` (default=0x75626974) is an arbitrary name, expressed as a
-    32-bit address, that's used to filter incoming packets at the hardware
-    level, keeping only those that match the address you set. The default used
-    by other micro:bit related platforms is the default setting used here.
-
-    The ``group`` (default=0) is an 8-bit value (0-255) used with the
-    ``address`` when filtering messages. Conceptually, "address" is like a
-    house/office address and "group" is like the person at that address to
-    which you want to send your message.
-
-    The ``data_rate`` (default=radio.RATE_1MBIT) indicates the speed at which
-    data throughput takes place. Can be one of the following contants defined
-    in the ``radio`` module : ``RATE_250KBIT``, ``RATE_1MBIT`` or
-    ``RATE_2MBIT``.
-
-    If ``config`` is not called then the defaults described above are assumed.
+	Jeżeli "config" nie zostanie wywołany wtedy przyjęte zostaną ustawienia o domyślnych wartościach. 
 
 .. py:function:: reset()
 
-    Reset the settings to their default values (as listed in the documentation
-    for the ``config`` function above).
+	Zresetuj ustawienia do wartości domyślnych (patrz powyżej w dokumentacji funkcji config). 
 
 .. note::
 
-    None of the following send or receive methods will work until the radio is
-    turned on.
+	Żadna z powyższych metod wysyłania lub nadawania nie będzie działać jeżeli radio nie będzie włączone. 
 
-.. py:function:: send_bytes(message)
+.. py:function:: send_bytes(treść wiadomości)
 
-    Sends a message containing bytes.
+	Wysyła wiadomość składającą się z bajtów.
 
 .. py:function:: receive_bytes()
 
-    Receive the next incoming message on the message queue. Returns ``None`` if
-    there are no pending messages. Messages are returned as bytes.
-
+	Wczytuje z kolejki pierwszą wiadomość przychodzącą. Zwraca "None" (brak) jeżeli nie ma oczekujących wiadomości. Wiadomości wyświetlane są jako bajty. 
+	
 .. py:function:: receive_bytes_into(buffer)
 
-    Receive the next incoming message on the message queue. Copies the message
-    into ``buffer``, trimming the end of the message if necessary.
-    Returns ``None`` if there are no pending messages, otherwise it returns the length
-    of the message (which might be more than the length of the buffer).
+	Odbiera następną wiadomość przychodzącą z kolejki wiadomości. Kopiuje treść wiadomości do bufora, ucinając jej koniec jeśli to konieczne. Zwraca "None" jeżeli nie ma wiadomości oczekujących, jeżeli są, zwraca długość wiadomości (długość wiadomości może być dłuższa od długości bufora). 
 
-.. py:function:: send(message)
+.. py:function:: send("treść wiadomości")
 
-    Sends a message string. This is the equivalent of
-    ``send_bytes(bytes(message, 'utf8'))`` but with ``b'\x01\x00\x01'``
-    prepended to the front (to make it compatible with other platforms that
-    target the micro:bit).
+	Wysyła wiadomość w postaci ciągu znaków. Jest odpowiednikiem ``send_bytes(bytes(treść wiadomości, 'utf8'))``, ale z ``b'\x01\x00\x01'`` dodanymi na początku (dla zapewnienia kompatybilności z innymi platformami współpracującymi z micro:bit).
 
 .. py:function:: receive()
 
-    Works in exactly the same way as ``receive_bytes`` but returns
-    whatever was sent.
+	Funkcja działa dokładnie w ten sam sposób co ``receive_bytes`` przy czym zwraca wiadomość w takiej postaci w jakiej była wysyłana.
+	
+	Obecnie jest to odpowiednik ``str(receive_bytes(), 'utf8')``, ale ze sprawdzeniem czy pierwsze 3 bajty to ``b'\x01\x00\x01'`` (dla zapewnienia kompatybilności z innymi platformami współpracującymi z micro:bit). Te trzy bajty są usuwane przed konwersją na ciąg znaków. 
 
-    Currently, it's equivalent to ``str(receive_bytes(), 'utf8')`` but with a
-    check that the the first three bytes are ``b'\x01\x00\x01'`` (to make it
-    compatible with other platforms that may target the micro:bit). It strips
-    the prepended bytes before converting to a string.
+    
+	Wyjątek ``ValueError`` wyświetlany jest w przypadku niepowodzenia konwersji treści wiadomości na ciąg znaków.
 
-    A ``ValueError`` exception is raised if conversion to string fails.
-
-Examples
---------
+Przykłady 
+---------
 
 .. include:: ../examples/radio.py
     :code: python
