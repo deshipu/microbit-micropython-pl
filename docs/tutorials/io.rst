@@ -1,31 +1,28 @@
-Input/Output
-------------
+Wejście/Wyjście
+---------------
 
-There are strips of metal along the bottom edge of the BBC micro:bit that make
-it look as if the device has teeth. These are the input/output pins (or I/O pins
-for short).
+Na dolnej krawędzi micro:bita znajdują się paski metalu, które sprawiają, że urządzenie wygląda
+jakby miało zęby. Są to piny wejścia/wyjścia, w skrócie piny we/wy (ang. input/output - I/O).
 
 .. image:: blue-microbit.png
 
-Some of the pins are bigger than others so it's possible to attach crocodile
-clips to them. These are the ones labelled 0, 1, 2, 3V and GND (computers
-always start counting from zero). If you attach an edge connector board to the
-device it's possible to plug in wires connected to the other (smaller) pins.
+Niektóre piny są większe od innych, aby było możliwe podłączenie do nich krokodylków (zacisków). 
+Są one oznaczone 0, 1, 2, 3V oraz GND (komputery zawsze zaczynają liczyć od zera). Jeśli podłączysz
+płytkę złącza krawędziowego do urządzenia, będziesz mógł podłączać kabelki również do pozostałych 
+(mniejszych) pinów.
 
-Each pin on the BBC micro:bit is represented by an *object* called ``pinN``
-where ``N`` is the pin number. So, for example, to do things with the pin
-labelled with a 0 (zero), use the object called ``pin0``.
+Każdy pin micro:bita jest reprezentowany przez *obiekt* o nazwie ``pinN``, gdzie ``N`` jest numerem pinu.
+Zatem, na przykład, aby zrobić coś z pinem oznaczonym numerem 0 (zero) użyj obiektu o nazwie ``pin0``.
 
-Simple!
+Proste!
 
-These objects have various *methods* associated with them depending upon what
-the specific pin is capable of.
+Te obiekty posiadają różne *metody*, w zależności od tego, do czego dany pin może zostać wykorzystany.
 
-Ticklish Python
-+++++++++++++++
+Delikatny Python
+++++++++++++++++
 
-The simplest example of input via the pins is a check to see if they are
-touched. So, you can tickle your device to make it laugh like this::
+Najprostszym przykładem wejścia przez pin jest sprawdzenie, czy jest on dotknięty. 
+W taki oto sposób możesz połaskotać swoje urządzenie, aby je rozśmieszyć::
 
     from microbit import *
 
@@ -35,38 +32,37 @@ touched. So, you can tickle your device to make it laugh like this::
         else:
             display.show(Image.SAD)
 
-With one hand, hold your device by the GND pin. Then, with your other hand,
-touch (or tickle) the 0 (zero) pin. You should see the display change from
-grumpy to happy!
+Jedną ręką trzymaj urządzenie za pin GND. Następnie, drugą ręką dotknij (lub połaskocz) 
+pin 0 (zero). Powinieneś zobaczyć na wyświetlaczu zmianę z miny smutnej na szczęśliwą!
 
-This is a form of very basic input measurement. However, the fun really starts
-when you plug in circuits and other devices via the pins.
+To jest tylko bardzo podstawowa forma sprawdzenia działania wejścia. Prawdziwa zabawa
+zaczyna się, gdy do pinów podłączysz obwody oraz inne urządzenia.
 
-Bleeps and Bloops
-+++++++++++++++++
+Piski i buczenia
+++++++++++++++++
 
-The simplest thing we can attach to the device is a Piezo buzzer. We're going
-to use it for output.
+Najprostszą rzeczą, które możemy podłączyć do naszego urządzenia
+jest brzęczyk piezoelektryczny. Użyjemy go jako wyjście.
 
 .. image:: piezo_buzzer.jpg
 
-These small devices play a high-pitched bleep when connected to a circuit. To
-attach one to your BBC micro:bit you should attach crocodile clips to pin 0 and
-GND (as shown below).
+To małe urządzenie wydaje wysoki dźwięk, kiedy zostanie podłączone do obwodu. Aby podłączyć 
+je do swojego micro:bita, możesz przypiąć krokodylki do pinu 0 oraz GND
+(jak widać na poniższym obrazku).
 
 .. image:: pin0-gnd.png
 
-The wire from pin 0 should be attached to the positive connector on the buzzer
-and the wire from GND to the negative connector.
+Kabel z pinu 0 powinien być podłączony do dodatniego złącza brzęczyka, a kabel z pinu GND 
+do złącza ujemnego.
 
-The following program will cause the buzzer to make a sound::
+Poniższy program sprawi, że brzęczyk wyda dźwięk::
 
     from microbit import *
 
     pin0.write_digital(1)
 
-This is fun for about 5 seconds and then you'll want to make the horrible
-squeaking stop. Let's improve our example and make the device bleep::
+Jest to zabawne przez około 5 sekund, ale potem będziesz chciał wyłączyć ten okropny dźwięk.
+Rozbudujmy nasz przykład i sprawmy, aby urządzenie wydawało piski::
 
     from microbit import *
 
@@ -76,16 +72,15 @@ squeaking stop. Let's improve our example and make the device bleep::
         pin0.write_digital(0)
         sleep(480)
 
-Can you work out how this script works? Remember that ``1`` is "on" and ``0``
-is "off" in the digital world.
+Czy domyślasz się jak działa ten skrypt? Pamiętaj, że w cyfrowym świecie ``1`` oznacza "włączony", 
+zaś ``0`` "wyłączony".
 
-The device is put into an infinite loop and immediately switches pin 0 on. This
-causes the buzzer to emit a beep. While the buzzer is beeping, the device
-sleeps for twenty milliseconds and then switches pin 0 off. This gives the
-effect of a short bleep. Finally, the device sleeps for 480 milliseconds before
-looping back and starting all over again. This means you'll get two bleeps per
-second (one every 500 milliseconds).
+Urządzenie jest wprowadzane w nieskończoną pętlę i natychmiast włącza pin 0. To powoduje,
+że brzęczyk wydaje pisk. Podczas gdy brzęczyk piszczy, urządzenie usypia na 20 milisekund,
+a następnie wyłącza pin 0. Daje to efekt krótkiego pisku. W końcu, urządzenie usypia 
+na 480 milisekund, zanim rozpocznie pętlę od początku. To znaczy, że usłyszysz
+dwa piski na sekundę (jeden co 500 milisekund).
 
-We've made a very simple metronome!
+Stworzyliśmy bardzo prosty metronom!
 
-.. footer:: The image of the pizeo buzzer is CC BY-NC-SA 3.0 from https://www.flickr.com/photos/tronixstuff/4821350094
+.. footer:: Obrazek brzęczyka piezoelektrycznego na licencji CC BY-NC-SA 3.0 z https://www.flickr.com/photos/tronixstuff/4821350094
