@@ -1,91 +1,73 @@
-Speech
-------
+Mowa
+----
 
 .. warning::
 
-    WARNING! THIS IS ALPHA CODE.
+    UWAGA! TO JEST KOD ALFA!
 
-    We reserve the right to change this API as development continues.
+    Zastrzegamy sobie prawo do zmiany tego interfejsu API w miarę rozwoju oprogramowania.
 
-    The quality of the speech is not great, merely "good enough". Given the
-    constraints of the device you may encounter memory errors and / or
-    unexpected extra sounds during playback. It's early days and we're
-    improving the code for the speech synthesiser all the time. Bug reports
-    and pull requests are most welcome.
+    Jakość mowy nie jest świetna, tylko "wystarczająco dobra". Ze względu na ograniczenia urządzenia, mogą wystąpić błędy pamięci i / lub nieoczekiwane dodatkowe dźwięki podczas odtwarzania. To są dopiero początki i cały czas poprawiamy kod syntezatora mowy. Zgłaszanie błędów będzie mile widziane.
 
-Computers and robots that talk feel more "human".
+Komputery i roboty, które mówią wydają się bardziej "ludzkie".
 
-So often we learn about what a computer is up to through a graphical user
-interface (GUI). In the case of a BBC micro:bit the GUI is a 5x5 LED matrix,
-which leaves a lot to be desired.
+Często o tym co komputer właśnie robi dowiadujemy się poprzez graficzny interfejs użytkownika (ang. graphical user interface, GUI). W przypadku BBC micro:bit, GUI to matryca LED 5x5, która pozostawia wiele do życzenia.
 
-Getting the micro:bit talk to you is one way to express information in a fun,
-efficient and useful way. To this end, we have integrated a simple speech
-synthesiser based upon a reverse-engineered version of a synthesiser from the
-early 1980s. It sounds very cute, in an "all humans must die" sort of a way.
+Sprawienie, aby micro:bit mówił, jest jednym ze sposobów na wyrażenie informacji w zabawny, skuteczny i użyteczny sposób. W tym celu zintegrowaliśmy prosty syntezator mowy oparty na zdekonstruowanej wersji syntezatora z wczesnych lat osiemdziesiątych. Brzmi on naprawdę uroczo, w stylu "wszyscy ludzie muszą umrzeć".
 
-With this in mind, we're going to use the speech synthesiser to create...
+Mając to na uwadze, użyjemy syntezatora do stworzenia...
 
-DALEK Poetry
-++++++++++++
+Poezji DALEKów
+++++++++++++++
 
 .. image:: dalek.jpg
 
-It's a little known fact that DALEKs enjoy poetry ~ especially limericks.
-They go wild for anapestic meter with a strict AABBA form. Who'd have thought?
+Mało kto wie, że DALEKowie lubią poezję -- szczególnie limeryki. Szaleją na punkcie wierszy z anapestycznym metrum o surowej budowie AABBA. Kto by pomyślał!
 
-(Actually, as we'll learn below, it's The Doctor's fault DALEKs like limericks,
-much to the annoyance of Davros.)
+(Jak się niżej dowiemy, to wina Doktora, że, ku irytacji Davrosa, DALEKowie lubią limeryki.)
 
-In any case, we're going to create a DALEK poetry recital on demand.
+W każdym razie, zamierzamy stworzyć recital poezji DALEKowej na żądanie.
 
-Say Something
-+++++++++++++
+Powiedz coś
++++++++++++
 
-Before the device can talk you need to plug in a speaker like this:
+Zanim urządzenie będzie mogło mówić, musisz podłączyć głośniczek w taki sposób:
 
 .. image:: ../speech.png
 
-The simplest way to get the device to speak is to import the ``speech`` module
-and use the ``say`` function like this::
+Najłatwiejszym sposobem na to żeby urządzenie zaczęło mówić jest zaimportowanie modułu ``speech`` (pol. ``mowa``) i użycie funkcji ``say`` (pol. ``powiedz``) w taki sposób:: 
 
     import speech
 
     speech.say("Hello, World")
 
-While this is cute it's certainly not DALEK enough for our taste, so we need to
-change some of the parameters that the speech synthesiser uses to produce the
-voice. Our speech synthesiser is quite powerful in this respect because we can
-change four parameters:
+Jest to urocze, jednak nie jest wystarczająco DALEKowate jak na nasz gust, dlatego musimy zmienić niektóre parametry używane przez syntezator do wygenerowania mowy. Nasz syntezator mowy jest pod tym względem dość potężny, ponieważ możemy zmienić cztery parametry:
 
-* ``pitch`` - how high or low the voice sounds (0 = high, 255 = Barry White)
-* ``speed`` - how quickly the device talks (0 = impossible, 255 = bedtime story)
-* ``mouth`` - how tight-lipped or overtly enunciating the voice sounds (0 = ventriloquist's dummy, 255 = Foghorn Leghorn)
-* ``throat`` - how relaxed or tense is the tone of voice (0 = falling apart, 255 = totally chilled)
+* ``pitch`` (pol. ``ton``) - jak wysoko lub nisko brzmi głos (0 = wysoko, 255 = Barry White)
+* ``speed`` (pol. ``szybkość``) - jak szybko urządzenie mówi (0 = niemożliwe, 255 = opowiadanie na dobranoc)
+* ``mouth`` (pol. ``usta``) - czy mowa jest przez zaciśnięte zęby czy bardzo wyraźna (0 = kukiełka brzuchomówcy, 255 = Kurak Leghorn)
+* ``throat`` (pol. ``gardło``) - jak spokojny lub napięty jest ton głosu (0 = załamujący się, 255 = kompletnie rozluźniony)
 
-Collectively, these parameters control the quality of sound - a.k.a. the
-timbre. To be honest, the best way to get the tone of voice you want is to
-experiment, use your judgement and adjust.
+W sumie razem parametry te kontrolują jakość dźwięku -- tj. barwę dźwięku. Szczerze mówiąc, najlepszą drogą do uzyskania pożądanej barwy dźwięku jest eksperymentowanie, ocena i dostosowanie.
 
-To adjust the settings you pass them in as arguments to the ``say`` function.
-More details can be found in the ``speech`` module's API documentation.
+Aby dostosować ustawienia, przekazujesz je jako argumenty funkcji ``say``. Więcej szczegółów można znaleźć w dokumentacji interfejsu API ``speech``.
 
-After some experimentation we've worked out this sounds quite DALEK-esque::
+Po kilku przeprowadzonych eksperymentach, ten brzmi całkiem DALEKowato::
 
     speech.say("I am a DALEK - EXTERMINATE", speed=120, pitch=100, throat=100, mouth=200)
 
-Poetry on Demand
-++++++++++++++++
+Poezja na Żądanie
++++++++++++++++++
 
-Being Cyborgs DALEKs use their robot capabilities to compose poetry and it
-turns out that the algorithm they use is written in Python like this::
+Będąc cyborgami, DALEKowie wykorzystują umiejętności robotów do tworzenia poezji
+i okazuje się, że korzystają z algorytmów napisanych w Pythonie, np::
 
-    # DALEK poetry generator, by The Doctor
+    # Generator poezji DALEKowej Doktora
     import speech
     import random
     from microbit import sleep
 
-    # Randomly select fragments to interpolate into the template.
+    # Losowo wybierz fragmenty do wstawienia do szablonu.
     location = random.choice(["brent", "trent", "kent", "tashkent"])
     action = random.choice(["wrapped up", "covered", "sang to", "played games with"])
     obj = random.choice(["head", "hand", "dog", "foot"])
@@ -98,7 +80,7 @@ turns out that the algorithm they use is written in Python like this::
     conclusion = random.choice(["where it went", "its intent", "why it went",
                                "what it meant"])
 
-    # A template of the poem. The {} are replaced by the named fragments.
+    # Szablon wiersza. Nawiasy {} będą zastąpione nazwanymi fragmentami. 
     poem = [
         "there was a young man from {}".format(location),
         "who {} his {} {}".format(action, obj, prop),
@@ -108,78 +90,62 @@ turns out that the algorithm they use is written in Python like this::
         "EXTERMINATE",
     ]
 
-    # Loop over each line in the poem and use the speech module to recite it.
+    # Wprowadź w pętlę każdą linię wiersza i użyj modułu
     for line in poem:
         speech.say(line, speed=120, pitch=100, throat=100, mouth=200)
         sleep(500)
 
-As the comments demonstrate, it's a very simple in design:
+Jak pokazują komentarze, jest to bardzo prosty model:
 
-* Named fragments (``location``, ``prop``, ``attitude`` etc) are randomly generated from pre-defined lists of possible values. Note the use of ``random.choice`` to select a single item from a list.
-* A template of a poem is defined as a list of stanzas with "holes" in them (denoted by ``{}``) into which the named fragments will be put using the ``format`` method.
-* Finally, Python loops over each item in the list of filled-in poetry stanzas and uses ``speech.say`` with the settings for the DALEK voice to recite the poem. A pause of 500 milliseconds is inserted between each line because even DALEKs need to take a breath.
+* Nazwane fragmenty (``location``, ``prop``, ``attitude`` itd.) są generowane losowo z predefiniowanych list możliwych wartości. Zwróć uwagę na użycie ``random.choice`` w celu wybrania pojedynczego elementu z listy.
+* Szablon wiersza definiowany jest jako lista zwrotek z "dziurami" (oznaczonymi przez ``{}``), do których za pomocą metody ``format`` wstawione zostaną nazwane fragmenty.
+* Na koniec, Python przechodzi po wszystkich elementach na liście wypełniaczy poezji i używa ``speech.say`` z ustawieniami głosu DALEKa do recytowania wiersza. Między poszczególnymi liniami wstawiana jest pauza 500 milisekund, ponieważ nawet DALEKowie muszą odetchnąć.
 
-Interestingly the original poetry related routines were written by Davros in
-`FORTRAN <https://en.wikipedia.org/wiki/Fortran>`_ (an appropriate
-language for DALEKS since you type it ALL IN CAPITAL LETTERS). However, The
-Doctor went back in time to precisely the point between Davros's
-`unit tests <https://en.wikipedia.org/wiki/Unit_testing>`_
-passing and the
-`deployment pipeline <https://en.wikipedia.org/wiki/Continuous_delivery>`_
-kicking in. At this instant he was able to insert a MicroPython interpreter
-into the DALEK operating system and the code you see above into the DALEK
-memory banks as a sort of long hidden Time-Lord
-`Easter Egg <https://en.wikipedia.org/wiki/Easter_egg_(media)>`_ or
-`Rickroll <https://www.youtube.com/watch?v=dQw4w9WgXcQ>`_.
+Co ciekawe, oryginalne wytyczne związane z poezją zostały napisane przez
+Davrosa w języku `FORTRAN <https://en.wikipedia.org/wiki/Fortran>`_
+(odpowiedni język dla DALEKów, gdyż pisany jest TYLKO WIELKIMI LITERAMI). Jednakże
+Doktor cofnął się w czasie dokładnie do punktu pomiędzy wprowadzaniem
+`testów jednostkowych <https://pl.wikipedia.org/wiki/Test_jednostkowy>`_ Davros'a i
+`potoków wdrożeniowych <https://en.wikipedia.org/wiki/Continuous_delivery>`_ .
+Wówczas był w stanie umieścić interpreter MicroPythona w systemie
+operacyjnym DALEKA i powyżej widzisz zawarty w bankach pamięci DALEKA kod z
+`ukrytą niespodzianką <https://pl.wikipedia.org/wiki/Easter_egg>`_ czy też
+`rickrollem <https://www.youtube.com/watch?v=dQw4w9WgXcQ>`_ od Władcy Czasu.
 
-Phonemes
-++++++++
+Fonemy
+++++++
 
-You'll notice that sometimes, the ``say`` function doesn't accurately translate
-from English words into the correct sound. To have fine grained control of the
-output, use phonemes: the building-block sounds of language.
+Zauważysz, że funkcja ``say`` nie tłumaczy dokładnie słów na odpowiednie dźwięki. Aby mieć lepszą kontrolę nad rezultatem, użyj fonemów: podstawowej jednostki struktury fonologicznej mowy.
 
-The advantage of using phonemes is that you don't have to know how to spell!
-Rather, you only have to know how to say the word in order to spell it
-phonetically.
+Korzyść z używania fonemow jest taka, że nie musisz wiedzieć jak się poszczególne wyrazy pisze. Musisz tylko wiedzieć jak się to słowo wymawia, aby zapisać je fonetycznie.
 
-A full list of the phonemes the speech synthesiser understands can be found in
-the API documentation for speech. Alternatively, save yourself a lot of time by
-passing in English words to the ``translate`` function. It'll return a first
-approximation of the phonemes it would use to generate the audio. This result
-can be hand-edited to improve the accuracy, inflection and emphasis (so it
-sounds more natural).
+Pełna lista fonemów rozumianych przez syntezator mowy znajduje się w dokumentacji API dla mowy. Ewentualnie, zaoszczędź sobie dużo czasu wprowadzając angielskie słowa do funkcji ``translate`` (pol. przetłumacz). Zwróci ona pierwsze przybliżenie fonemów, które micro:bit wykorzystałby do wygenerowania audio. Otrzymany rezultat może zostać ręcznie zmodyfikowany, żeby poprawić dokładność, fleksję i akcent (tak aby brzmiał bardziej naturalnie).
 
-The ``pronounce`` function is used for phoneme output like this::
+Funkcja ``pronounce`` (pol. wymówić) jest używana do wyprowadzania fonemu w następujący sposób::
 
     speech.pronounce("/HEH5EH4EH3EH2EH2EH3EH4EH5EHLP.”)
 
-How could you improve on The Doctor's code to make it use phonemes?
+Jak udoskonaliłbyś kod Doktora, aby używał fonemów?
 
-Sing A Song of Micro:bit
-++++++++++++++++++++++++
+Zaśpiewaj Piosenkę Micro:bit'a
+++++++++++++++++++++++++++++++
 
-By changing the ``pitch`` setting and calling the ``sing`` function it's
-possible to make the device sing (although it's not going to win Eurovision any
-time soon).
+Poprzez zmianę ustawień ``pitch`` (pol. ton) i wywołanie funkcji ``sing`` (pol. śpiewaj), urządzenie może zacząć śpiewać (jednakże bez szans na wygranie Eurowizji, póki co).
 
-The mapping from pitch numbers to musical notes is shown below:
+Mapowanie z numerów tonów na nuty jest pokazane poniżej:
 
 .. image:: ../speech-pitch.png
 
-The ``sing`` function must take phonemes and pitch as input like this::
+Funkcja ``sing`` musi przyjąć jako dane wejściowe fonemy i tonację::
 
     speech.sing("#115DOWWWW")
 
-Notice how the pitch to be sung is prepended to the phoneme with a hash
-(``#``). The pitch will remain the same for subsequent phonemes until a new
-pitch is annotated.
+Zwróć uwagę na to, w jaki sposób fonemy poprzedzone są wysokością dźwięku z symbolem kratki (``#``). Tonacja pozostanie taka sama dla kolejnych fonemów do momentu wprowadzenia nowej tonacji.
 
-The following example demonstrates how all three generative functions (``say``,
-``pronounce`` and ``sing``) can be used to produce speech like output:
+Poniższy przykład pokazuje jak wszystkie trzy funkcje generujące (``say``,
+``pronounce`` oraz ``sing``) mogą zostać wykorzystane do stworzenia czegoś przypominającego mowę.
 
 .. include:: ../../examples/speech.py
     :code: python
 
-.. footer:: The image of the DALEK is licensed as per the details here: https://commons.wikimedia.org/wiki/File:Dalek_(Dr_Who).jpg The image of DAVROS is licensed as per the details here: https://en.wikipedia.org/wiki/File:Davros_and_Daleks.jpg
-
+.. footer:: Obraz DALEKa jest licencjonowany na zasadach przestawionych poniżej: https://commons.wikimedia.org/wiki/File:Dalek_(Dr_Who).jpg Obraz DAVROSa jest licencjonowany na zasadach przedstawionych poniżej: https://en.wikipedia.org/wiki/File:Davros_and_Daleks.jpg
