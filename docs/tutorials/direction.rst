@@ -1,13 +1,13 @@
-Direction
----------
+Kierunek
+--------
 
-There is a compass on the BBC micro:bit. If you ever make a weather station
-use the device to work out the wind direction.
+Na urządzeniu BBC micro:bit znajduje się kompas. Jeżeli kiedykolwiek zrobisz
+stację pogodową, możesz użyć micro:bita do sprawdzania kierunku wiatru.
 
-Compass
-+++++++
+Kompas
+++++++
 
-It can also tell you the direction of North like this::
+Urządzenie może również wskazać kierunek północny::
 
     from microbit import *
 
@@ -19,14 +19,14 @@ It can also tell you the direction of North like this::
 
 .. note:: 
 
-    **You must calibrate the compass before taking readings.** Failure to do so
-    will produce garbage results. The ``calibration`` method runs a fun little
-    game to help the device work out where it is in relation to the Earth's
-    magnetic field.
+    **Przed dokonaniem pomiaru należy skalibrować urządzenie.** W innym wypadku
+    rezultaty będą niepoprawne. Aby urządzenie zorientowało się w swoim ustawieniu
+    względem pola magnetycznego Ziemi, metoda ``calibration`` uruchamia małą,
+    śmieszną grę. 
 
-    To calibrate the compass, tilt the micro:bit around until a circle of pixels is
-    drawn on the outside edges of the display.
+    Aby skalibrować kompas, obracaj micro:bitem, dopóki krańcowe piksele
+    wyświetlacza nie utworzą koła.
 
-The program takes the ``compass.heading`` and, using some simple yet
-cunning maths, `floor division <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`_ ``//`` and `modulo <https://en.wikipedia.org/wiki/Modulo_operation>`_ ``%``, works out the number of the clock hand to use to display on the screen
-so that it is pointing roughly North.
+Program używa ``compass.heading`` i, wraz z prostą, acz piękną matematyką,
+`podłogą i sufitem <https://pl.wikipedia.org/wiki/Pod%C5%82oga_i_sufit>`_ ``//`` oraz `resztą z dzielenia <https://pl.wikipedia.org/wiki/Modulo>`_ ``%``, wyprowadza pozycję wskazówki zegara, po czym wyświetla ją tak,
+by pokazywała mniej więcej północ.
